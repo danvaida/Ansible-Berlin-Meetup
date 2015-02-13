@@ -1,0 +1,21 @@
+---
+- name: patching against the GHOST vulnerability
+  hosts: all
+  #gather_facts: true (default)
+  tasks:
+    - name: grouping hosts by OS
+      group_by: key=os_{{ ansible_distribution }}
+  
+- hosts: os_Debian
+  sudo: yes
+  gather_facts: false
+  tasks:
+    - name: updating libc6 on Debian
+      apt: name=libc6 state=latest update_cache=yes
+
+- hosts: os_CentOS
+  sudo: yes
+  gather_facts: false
+  tasks:
+    - name: updating glibc on CentOS
+      yum: name=glibc state=latest

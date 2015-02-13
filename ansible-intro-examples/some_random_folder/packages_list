@@ -1,0 +1,19 @@
+---
+
+install_packages:
+  debian:
+    - 'locales'
+    - 'openssl'
+  redhat:
+    db:
+      - 'cronie'
+      - 'postgresql-server'
+      - 'mailx'
+    cache:
+      - 'redis'
+remove_packages:
+  debian:
+    - 'apache2*'
+  redhat:
+    - 'sendmail*'
+    - 'mysql*'

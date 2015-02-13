@@ -1,0 +1,6 @@
+---
+- name: adding the users
+  user: name="{{ item.key }}" comment="{{ item.value.name }}" generate_ssh_key=yes
+  with_dict: staff
+  tags:
+    - users

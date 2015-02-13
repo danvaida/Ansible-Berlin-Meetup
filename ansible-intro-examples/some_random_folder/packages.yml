@@ -1,0 +1,34 @@
+---
+- hosts: Debian
+  sudo: yes
+  gather_facts: false
+  tasks:
+    - include_vars: packages_list
+
+    - name: uninstall packages on Debian
+      apt: name="{{ item }}" state=absent
+      with_items: remove_packages.debian 
+
+    - name: install packages on Debian
+      apt: name="{{ item }}" state=latest
+      with_items: install_packages.debian 
+
+- hosts: CentOS
+  sudo: yes
+  gather_facts: false
+  tasks:
+    - include_vars: packages_list
+
+    - name: uninstall packages on CentOS
+      yum: name="{{ item }}" state=absent
+      with_items: remove_packages.redhat 
+
+    - name: install packages on CentOS DB box
+      yum: name="{{ item }}" state=latest
+      with_items: install_packages.redhat.db
+      when: db is defined
+
+    - name: install packages on CentOS Cache box
+      yum: name="{{ item }}" state=latest
+      with_items: install_packages.redhat.cache
+      when: cache is defined

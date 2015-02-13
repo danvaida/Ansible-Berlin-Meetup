@@ -1,0 +1,10 @@
+---
+- hosts: all
+  sudo: yes
+  tasks:
+    - group_by: key={{ ansible_distribution }}
+  roles:
+    - nginx 
+    - users
+
+- include: some_random_folder/packages.yml

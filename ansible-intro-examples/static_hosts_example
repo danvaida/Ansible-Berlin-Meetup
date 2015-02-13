@@ -1,0 +1,21 @@
+[local]
+localhost ansible_connection=local
+
+[all]
+srv[01:10]
+srv12 ansible_ssh_port=22123
+srv14 ansible_ssh_user=ec2-user
+
+[webservers]
+srv01
+srv05 ansible_connection=paramiko
+
+[web]
+localhost
+
+[databases]
+srv02 ansible_ssh_private_key_file=/home/example/.ssh/aws.pem
+srv06
+
+[databases:vars]
+databases=true

@@ -1,0 +1,33 @@
+---
+- hosts: web
+  sudo: yes
+  tasks:
+
+    - git: dest=/tmp/ansible repo=git://github.com/ansible/ansible.git accept_hostkey=yes
+    
+    - apt: name={{ item }} state=latest update_cache=yes
+      with_items:
+        - cdbs
+        - debhelper
+        - dpkg-dev
+        - git-core
+        - reprepro
+        - python-support
+        - asciidoc
+        - devscripts
+        - python-setuptools
+    
+    - command: chdir=/tmp/ansible make deb
+    
+    - shell: ls -1 /tmp/ansible/deb-build/unstable/ansible_*.deb
+      register: build
+    
+    - apt: deb="{{ build.stdout }}"
+    
+    - user: name=root generate_ssh_key=yes
+      register: root_key
+    
+    - debug: var=root_key.ssh_public_key
+    
+    - cron: name="ansible pull mode" minute=*/1 user="root" cron_file=ansible_pull
+            job="ansible-pull --accept-host-key --directory /tmp/playbook --url ssh://git@stash.scarosso.net:7999/ansi/ansible-meetup-intro.git --key-file=/root/.ssh/id_rsa all_roles.yml --tags nginx --inventory-file static_hosts_example >> /var/log/ansible-pull.log 2>&1"

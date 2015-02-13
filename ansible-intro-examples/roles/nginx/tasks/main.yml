@@ -1,0 +1,35 @@
+---
+- name: installing nginx
+  apt: name=nginx state=latest update_cache=yes
+  when: web is defined
+  notify:
+    - start nginx
+  tags: 
+    - nginx
+
+- name: creating the htpasswd directory for nginx
+  file:
+    dest: /etc/nginx/htpasswd
+    mode: 0755 #this is not the same as mode: 755! current is equivalent to mode=755
+    state: directory
+  when: web is defined
+  tags:
+    - htpasswd
+    - nginx
+
+# sensitive data ahead: use Vault!
+- name: creating the credentials file for htpasswd
+  htpasswd: name="{{ item.key }}" password="{{ item.value.password }}" path=/etc/nginx/htpasswd/staff
+  with_dict: staff
+  when: web is defined
+  tags:
+    - htpasswd
+    - nginx
+
+- name: copying the index.html file
+  copy: src=index.html dest=/usr/share/nginx/www/index.html owner=root group=root
+  when: web is defined
+  tags:
+    - htpasswd
+    - nginx
+    - website
