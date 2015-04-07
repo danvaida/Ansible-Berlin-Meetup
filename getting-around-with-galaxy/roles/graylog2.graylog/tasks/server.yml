@@ -1,0 +1,16 @@
+---
+
+- name: Install Graylog server
+  apt: name=graylog-server state=present update_cache=yes
+
+- name: Configure Graylog server
+  template: src=graylog.server.conf.j2 dest=/etc/graylog/server/server.conf owner=graylog group=graylog mode=0644
+  notify: restart graylog-server
+
+- name: Configure Graylog ES
+  template: src=graylog.server.elasticsearch.yml.j2 dest=/etc/graylog/server/elasticsearch.yml owner=graylog group=graylog mode=0644
+  notify: restart graylog-server
+
+- name: Configure Graylog server defaults
+  template: src=graylog.server.default.j2 dest=/etc/default/graylog-server owner=graylog group=graylog mode=0644
+  notify: restart graylog-server
