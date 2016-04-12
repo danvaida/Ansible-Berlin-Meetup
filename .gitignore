@@ -1,0 +1,4 @@
+*.swp
+*.retry
+api_certs/*
+.vagrant
