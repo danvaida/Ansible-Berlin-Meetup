@@ -1,0 +1,12 @@
+---
+- name: updating /etc/localtime
+  file:
+    state: link
+    force: yes
+    src: /usr/share/zoneinfo/Europe/Berlin
+    dest: /etc/localtime
+
+- name: updating /etc/sysconfig/clock
+  template:
+    src: etc/sysconfig/clock.j2
+    dest: /etc/sysconfig/clock

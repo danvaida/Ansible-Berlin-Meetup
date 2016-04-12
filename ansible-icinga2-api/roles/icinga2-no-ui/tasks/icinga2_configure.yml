@@ -1,0 +1,20 @@
+---
+- name: Copying Main Icinga2 Configuration
+  template:
+    src: icinga2.conf.j2
+    dest: "{{ icinga2_main_conf }}"
+    backup: yes
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart icinga2
+
+- name: Copying Check Commands Configuration
+  template:
+    src: icinga2_check_commands.j2
+    dest: "{{ icinga2_conf_d }}/check_commands.conf"
+    backup: yes
+    owner: icinga
+    group: icinga
+    mode: 0640
+  notify: restart icinga2

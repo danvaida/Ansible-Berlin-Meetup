@@ -1,0 +1,19 @@
+---
+- name: Getting Icinga2 Yum Repo
+  get_url:
+    url: "{{ icinga2_url_yum }}"
+    dest: "{{ icinga2_repo_yum }}"
+
+- name: Installing Icinga2
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ icinga2_yum }}"
+  notify: start icinga2
+
+- name: Enabling Icinga2 to start on boot
+  service:
+    name: icinga2
+    enabled: yes
+
+- include: icinga2_configure.yml

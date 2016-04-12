@@ -1,0 +1,6 @@
+---
+ntp_servers:
+ - 0.europe.pool.ntp.org iburst dynamic
+ - 1.europe.pool.ntp.org iburst dynamic
+ - 2.europe.pool.ntp.org iburst dynamic
+ - 3.europe.pool.ntp.org iburst dynamic

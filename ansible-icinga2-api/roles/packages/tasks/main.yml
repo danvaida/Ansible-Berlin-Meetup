@@ -1,0 +1,45 @@
+---
+- name: upgrading all packages
+  yum:
+    name: "*"
+    state: latest
+
+- name: installing all required packages
+  yum:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+  with_items:
+    - "{{ inst_pkgs.common }}"
+    - "{{ inst_pkgs.redhat }}"
+
+- name: installing dependencies | "{{ packages }}"
+  yum:
+    name: "{{ packages }}"
+    state: latest
+    update_cache: yes
+  when: packages is defined
+
+- name: checking pip version
+  pip:
+    name: pip
+  register: pip_v
+  when: '"python-pip" in inst_pkgs.common'
+
+- name: upgrading pip if needed
+  shell: "pip install --upgrade pip"
+  when: '"python-pip" in inst_pkgs.common and "You should consider upgrading" in pip_v.stderr'
+  changed_when: "'Successfully installed' in {{ pip_upgd.stdout }}"
+  register: pip_upgd
+
+- name: installing python packages through pip
+  pip:
+    name: "{{ item }}"
+  when: '"python-pip" in inst_pkgs.common'
+  with_items: "{{ python_pkgs }}"
+
+- name: uninstalling unwanted packages
+  yum:
+    name: "{{ item }}"
+    state: absent
+  with_items: "{{ remv_pkgs.redhat }}"

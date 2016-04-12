@@ -1,0 +1,27 @@
+---
+dependencies:
+  - role: selinux
+    tags: selinux
+
+  - role: epel
+    tags: epel
+
+  - role: mariadb
+    tags: mariadb
+
+  - role: packages
+    packages:
+      - "MariaDB-client"
+      - "gcc-c++"
+      - "glibc-devel.i686"
+      - "glibc-static"
+      - "libstdc++-devel.i686"
+      - "libstdc++-static"
+      - "mailx"
+      - "openssl-devel.x86_64"
+      - "zlib-devel"
+      - "zlib-static"
+    tags: packages
+
+  - role: java
+    tags: java

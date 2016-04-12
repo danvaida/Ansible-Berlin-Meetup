@@ -1,0 +1,22 @@
+---
+inst_pkgs:
+  common:
+    - 'curl'
+    - 'sudo'
+    - 'make'
+    - 'openssl'
+    - 'python-pip'
+    - 'python-devel'
+    - 'gcc'
+    - 'mysql-devel'
+    - 'wget'
+  redhat: []
+  debian: []
+remv_pkgs:
+  redhat: []
+  debian: []
+
+python_pkgs:
+  - 'passlib'
+  - 'urllib3'
+  - 'mysql-python'

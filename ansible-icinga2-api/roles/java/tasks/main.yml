@@ -1,0 +1,14 @@
+---
+- name: fetching JRE RPM
+  get_url:
+    url: 'http://download.oracle.com/otn-pub/java/jdk/8u60-b27/jre-8u60-linux-x64.rpm'
+    dest: '/tmp/jre-8u60-linux-x64.rpm'
+    headers: 'Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie'
+    validate_certs: no
+  register: jre_rpm
+
+- name: installing JRE RPM
+  package:
+    name: /tmp/jre-8u60-linux-x64.rpm
+    state: present
+  when: jre_rpm.changed

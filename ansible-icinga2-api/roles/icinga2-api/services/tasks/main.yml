@@ -1,0 +1,17 @@
+---
+- name: creating the icinga2 service object(s)
+  uri:
+    user: "{{ icinga2_api_user }}"
+    password: "{{ icinga2_api_pass }}"
+    url: "https://{{ icinga2_hostname }}:5665/v1/objects/services/{{ item.host }}!{{ item.name }}"
+    method: "{{ icinga2_api_method | default('PUT') }}"
+    HEADER_Accept: "application/json"
+    body: "{{ item.info }}"
+    body_format: json
+    validate_certs: no
+    return_content: yes
+    status_code: ["200", "503"]
+  register: _icinga2_services
+  changed_when: "_icinga2_services.status == 200"
+  with_items: "{{ icinga2_services }}"
+  tags: icinga2_api_services

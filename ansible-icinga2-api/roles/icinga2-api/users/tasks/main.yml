@@ -1,0 +1,34 @@
+---
+#Do not confuse this with API users or with WebUI users.
+#This playbook handles the Icinga Contacts (a.k.a. "Users")
+#In this example, we are updating the e-mail address for the
+#icingaadmin Contact.
+- name: updating the default icingaadmin Contact e-mail
+  uri:
+    user: "{{ icinga2_api_user }}"
+    password: "{{ icinga2_api_pass }}"
+    url: "https://{{ icinga2_hostname }}:5665/v1/objects/users/icingaadmin"
+    method: POST
+    HEADER_Accept: "application/json"
+    body: "{{ icinga2_admin_contact_email }}"
+    body_format: json
+    validate_certs: no
+    return_content: yes
+  tags: icinga2_api_users
+
+- name: creating the icinga2 contact(s)
+  uri:
+    user: "{{ icinga2_api_user }}"
+    password: "{{ icinga2_api_pass }}"
+    url: "https://{{ icinga2_hostname }}:5665/v1/objects/users/{{ item.name }}"
+    method: "{{ icinga2_api_method | default('PUT') }}"
+    HEADER_Accept: "application/json"
+    body: "{{ item.info }}"
+    body_format: json
+    validate_certs: no
+    return_content: yes
+    status_code: ["200", "503"]
+  register: _icinga2_contacts
+  changed_when: "_icinga2_contacts.status == 200"
+  with_items: "{{ icinga2_contacts }}"
+  tags: icinga2_api_users

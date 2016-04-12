@@ -1,0 +1,68 @@
+---
+- name: creating required and optional directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: yes
+  with_items:
+    - "{{ macro_dir }}"
+    - "{{ preset_dir }}"
+    - "{{ doc_dir }}"
+    - '/etc/pki/rpm-gpg/'
+    - '/etc/yum.repos.d/'
+
+- name: copying the GPG key
+  copy:
+    src: "{{ gpgkey_file }}"
+    dest: "/etc/pki/rpm-gpg/{{ gpgkey_file }}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: copying the rpm macro file
+  copy:
+    src: "{{ macro_file }}"
+    dest: "{{ macro_dir }}/{{ macro_file }}"
+    owner: root
+    group: root
+    mode: 0644
+  when: macro_enabled
+
+- name: copy preset file
+  copy:
+    src: "{{ preset_file }}"
+    dest: "{{ preset_dir }}/{{ preset_file }}"
+    owner: root
+    group: root
+    mode: 0644
+  when: preset_enabled
+
+- name: copying the GPL to the doc directory
+  copy:
+    src: GPL
+    dest: "{{ doc_dir }}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: templating the epel.repo
+  template:
+    src: epel.repo
+    dest: /etc/yum.repos.d/epel.repo
+    owner: root
+    group: root
+    mode: 0644
+
+- name: templating the epel-testing.repo
+  template:
+    src: epel-testing.repo
+    dest: /etc/yum.repos.d/epel-testing.repo
+    owner: root
+    group: root
+    mode: 0644
+
+- name: installing the epel-release
+  yum:
+    name: epel-release
+    state: "{{ epel_state }}"
+    enablerepo: epel

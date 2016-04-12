@@ -1,0 +1,44 @@
+---
+#See below an example that shows how to use the Certificate-based Authentication of Icinga2 API
+- name: creating the icinga2 hostgroup object(s)
+  uri:
+    user: "{{ icinga2_api_user }}"
+    password: "{{ icinga2_api_pass }}"
+    url: "https://{{ icinga2_hostname }}:5665/v1/objects/hostgroups/{{ item.name }}"
+    method: "{{ icinga2_api_method | default('PUT') }}"
+    HEADER_Accept: "application/json"
+    body: "{{ item.info }}"
+    body_format: json
+    validate_certs: no
+    return_content: yes
+    status_code: ["200", "503"]
+  register: _icinga2_hostgroups
+  changed_when: "_icinga2_hostgroups.status == 200"
+  with_items: "{{ icinga2_hostgroups }}"
+  tags: icinga2_api_hostgroups
+
+#- name: checking if the cee hostgroup object exists
+#  shell:
+#    "curl -s \
+#    --cacert /etc/icinga2/pki/ca.crt \
+#    --cert /etc/icinga2/pki/icinga2-master.crt \
+#    --key /etc/icinga2/pki/icinga2-master.key \
+#    -H 'Accept: application/json' \
+#    -X GET 'https://icinga2-master:5665/v1/objects/hostgroups/cee'"
+#  register: cee_hostgroup_check
+#  changed_when: False
+#  tags: icinga2_api_hostgroups
+#
+#- name: creating the cee hostgroup object
+#  shell:
+#    "curl -s \
+#    --cacert /etc/icinga2/pki/ca.crt \
+#    --cert /etc/icinga2/pki/icinga2-master.crt \
+#    --key /etc/icinga2/pki/icinga2-master.key \
+#    -H 'Accept: application/json' \
+#    -X PUT 'https://icinga2-master:5665/v1/objects/hostgroups/cee' \
+#    -d '{ \"attrs\": { \"display_name\": \"cee\" } }'"
+#  register: cee_hostgroup_create
+#  changed_when: "{{ (cee_hostgroup_create.stdout|from_json).results[0].code }} == 200.0"
+#  when: "'404' in cee_hostgroup_check.stdout"
+#  tags: icinga2_api_hostgroups

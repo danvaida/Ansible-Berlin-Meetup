@@ -1,0 +1,62 @@
+---
+- name: setting up the hostname
+  hosts: icinga2_master
+  become: yes
+  tasks:
+    - name: setting static, transient and pretty hostnames
+      shell:
+        "hostnamectl set-hostname {{ icinga2_hostname }} --{{ item }}"
+      when: ansible_distribution_major_version == "7" and ansible_distribution == "CentOS"
+      with_items:
+        - static
+        - transient
+        - pretty
+      tags: hostname
+
+    - name: updating /etc/hosts
+      lineinfile:
+        dest: /etc/hosts
+        regexp: "{{ ansible_eth0.ipv4.address }}"
+        line: "{{ ansible_eth0.ipv4.address }} {{ ansible_hostname }}"
+      tags: hostname
+
+  roles:
+    - role: ntp
+      tags: ntp
+
+    - role: timezone
+      tags: timezone
+
+    - role: packages
+      tags: packages
+
+    - role: icinga2-no-ui
+      tags: icinga2-no-ui
+
+    - role: icinga2-api/hostgroups
+      tags: icinga2-api
+
+    - role: icinga2-api/static_hosts
+      tags: icinga2-api
+
+    - role: icinga2-api/servicegroups
+      tags: icinga2-api
+
+    - role: icinga2-api/users
+      tags: icinga2-api
+
+- hosts: all:!localhost
+  gather_facts: no
+  become: no
+  roles:
+    - role: icinga2-api/dynamic_hosts
+      tags: icinga2-api
+
+    - role: icinga2-api/services
+      tags: icinga2-api
+
+- hosts: icinga2_master
+  become: no
+  roles:
+    - role: icinga2-api/services
+      tags: icinga2-api
