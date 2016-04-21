@@ -2,4 +2,22 @@
 check_commands:
   check_nrpe: |
      "-H", "$address$",
-         "-c", "$remote_nrpe_command$"
+         "-c", "$remote_nrpe_command$",
+  check_dig: |
+     "-H", "$dig_server$",
+         "-A", "$dig_arguments$",
+         "-T", "$dig_record_type$",
+         "-a", "$dig_expected_address$",
+         "-c", "$dig_critical$",
+         "-l", "$dig_lookup$",
+         "-p", "$dig_port$",
+         "-r", "$dig_retries$",
+         "-t", "$dig_timeout$",
+         "-v", "$dig_verbose$",
+         "-w", "$dig_warning$",
+  check_mysql: |
+     "-H", "$mysql_hostname$",
+         "-P", "$mysql_port$",
+         "-d", "$mysql_database$",
+         "-u", "$mysql_username$",
+         "-p", "$mysql_password$",
