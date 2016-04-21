@@ -1,0 +1,5 @@
+[icinga2a]
+icinga2a ansible_host=127.0.0.1 ansible_port=2222
+
+[icinga2b]
+icinga2b ansible_host=127.0.0.1 ansible_port=2200
