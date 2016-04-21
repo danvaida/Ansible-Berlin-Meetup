@@ -6,12 +6,8 @@ dependencies:
   - role: epel
     tags: epel
 
-  - role: mariadb
-    tags: mariadb
-
   - role: packages
     packages:
-      - "MariaDB-client"
       - "gcc-c++"
       - "glibc-devel.i686"
       - "glibc-static"

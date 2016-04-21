@@ -8,7 +8,6 @@ inst_pkgs:
     - 'python-pip'
     - 'python-devel'
     - 'gcc'
-    - 'mysql-devel'
     - 'wget'
   redhat: []
   debian: []
@@ -19,4 +18,3 @@ remv_pkgs:
 python_pkgs:
   - 'passlib'
   - 'urllib3'
-  - 'mysql-python'
