@@ -16,4 +16,4 @@
     name: icinga2
     enabled: yes
 
-- include: icinga2_configure.yml
+- include: config.yml
