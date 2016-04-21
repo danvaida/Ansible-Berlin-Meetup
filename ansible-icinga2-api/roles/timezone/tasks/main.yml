@@ -8,5 +8,5 @@
 
 - name: updating /etc/sysconfig/clock
   template:
-    src: etc/sysconfig/clock.j2
+    src: clock.j2
     dest: /etc/sysconfig/clock
