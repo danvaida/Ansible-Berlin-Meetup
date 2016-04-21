@@ -1,0 +1,27 @@
+---
+- name: disabling SELinux
+  selinux:
+    state: disabled
+  register: disable_selinux
+  tags: selinux
+
+- name: restarting the box
+  shell:
+    'sleep 2 && shutdown -r now "Ansible SELinux role restart"'
+  async: 1
+  poll: 0
+  when: disable_selinux.changed
+  ignore_errors: yes
+  tags: selinux
+
+- name: waiting for the box to restart
+  wait_for:
+    port: 22
+    host: "{{ hostvars[inventory_hostname].ansible_eth1.ipv4.address }}"
+    search_regex: OpenSSH
+    delay: 10
+    timeout: 60
+  when: disable_selinux.changed
+  delegate_to: localhost
+  become: no
+  tags: selinux
