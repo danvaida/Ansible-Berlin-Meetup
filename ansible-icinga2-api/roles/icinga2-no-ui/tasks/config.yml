@@ -1,0 +1,48 @@
+---
+- name: templating main Icinga2 configuration
+  template:
+    src: icinga2.conf.j2
+    dest: "{{ icinga2_main_conf }}"
+    backup: yes
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart icinga2
+
+- name: templating check commands configuration
+  template:
+    src: icinga2_check_commands.j2
+    dest: "{{ icinga2_conf_d }}/check_commands.conf"
+    backup: yes
+    owner: icinga
+    group: icinga
+    mode: 0640
+  notify: restart icinga2
+
+- name: running the api setup
+  shell: "icinga2 api setup"
+  notify: restart icinga2
+
+- name: templating the api-users file
+  template:
+    src: api-users.conf.j2
+    dest: /etc/icinga2/conf.d/api-users.conf
+    owner: icinga
+    group: icinga
+  notify: restart icinga2
+
+- meta: flush_handlers
+
+- name: fetching the Icinga API certs and key
+  fetch:
+    flat: yes
+    src: "/etc/icinga2/pki/{{ item }}"
+    dest: "./api_certs/{{ icinga2_hostname }}/{{ item }}"
+  with_items:
+    - 'ca.crt'
+    - "{{ icinga2_hostname }}.crt"
+    - "{{ icinga2_hostname }}.key"
+
+- name: Icinga API setup completed
+  debug:
+    msg: "The certs have been installed. For convenience, Ansible grabbed your copy and saved it to the api_certs folder."
