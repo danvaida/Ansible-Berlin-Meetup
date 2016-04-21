@@ -17,28 +17,32 @@
   with_items: "{{ icinga2_hostgroups }}"
   tags: icinga2_api_hostgroups
 
-#- name: checking if the cee hostgroup object exists
+#- name: checking if the hostgroup object(s) exist
 #  shell:
 #    "curl -s \
 #    --cacert /etc/icinga2/pki/ca.crt \
-#    --cert /etc/icinga2/pki/icinga2-master.crt \
-#    --key /etc/icinga2/pki/icinga2-master.key \
+#    --cert /etc/icinga2/pki/{{ icinga2_hostname }}.crt \
+#    --key /etc/icinga2/pki/{{ icinga2_hostname }}.key \
 #    -H 'Accept: application/json' \
-#    -X GET 'https://icinga2-master:5665/v1/objects/hostgroups/cee'"
-#  register: cee_hostgroup_check
+#    -X GET 'https://{{ icinga2_hostname }}:5665/v1/objects/hostgroups/{{ item.name }}'"
+#  register: _icinga2_hostgroups_check
 #  changed_when: False
+#  with_items: "{{ icinga2_hostgroups }}"
 #  tags: icinga2_api_hostgroups
 #
-#- name: creating the cee hostgroup object
+#- name: creating the hostgroup object(s)
 #  shell:
 #    "curl -s \
 #    --cacert /etc/icinga2/pki/ca.crt \
-#    --cert /etc/icinga2/pki/icinga2-master.crt \
-#    --key /etc/icinga2/pki/icinga2-master.key \
+#    --cert /etc/icinga2/pki/{{ icinga2_hostname }}.crt \
+#    --key /etc/icinga2/pki/{{ icinga2_hostname }}.key \
 #    -H 'Accept: application/json' \
-#    -X PUT 'https://icinga2-master:5665/v1/objects/hostgroups/cee' \
-#    -d '{ \"attrs\": { \"display_name\": \"cee\" } }'"
-#  register: cee_hostgroup_create
-#  changed_when: "{{ (cee_hostgroup_create.stdout|from_json).results[0].code }} == 200.0"
-#  when: "'404' in cee_hostgroup_check.stdout"
+#    -X PUT 'https://{{ icinga2_hostname }}:5665/v1/objects/hostgroups/{{ item.0.name }}' \
+#    -d '{{ item.0.info | to_json }}'"
+#  register: _icinga2_hostgroups_create
+#  changed_when: "'200.0' in _icinga2_hostgroups_create.stdout"
+#  when: "'404' not in {{ item.1.stdout }}"
+#  with_together:
+#    - "{{ icinga2_hostgroups }}"
+#    - "{{ _icinga2_hostgroups_check.results }}"
 #  tags: icinga2_api_hostgroups
