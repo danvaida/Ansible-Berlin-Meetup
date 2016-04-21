@@ -1,6 +1,5 @@
 ---
-- name: setting up the hostname
-  hosts: icinga2_master
+- hosts: icinga2a:icinga2b
   become: yes
   tasks:
     - name: setting static, transient and pretty hostnames
@@ -8,6 +7,9 @@
         name: "{{ icinga2_hostname }}"
       tags: hostname
 
+- hosts: icinga2a:icinga2b
+  become: yes
+  tasks:
     - name: updating /etc/hosts
       lineinfile:
         dest: /etc/hosts
@@ -15,6 +17,8 @@
         line: "{{ ansible_eth1.ipv4.address }} {{ ansible_hostname }}"
       tags: hostname
 
+- hosts: all:!localhost
+  become: yes
   roles:
     - role: ntp
       tags: ntp
@@ -40,16 +44,5 @@
     - role: icinga2-api/users
       tags: icinga2-api
 
-- hosts: all:!localhost
-  gather_facts: no
-  become: no
-  roles:
-
-    - role: icinga2-api/services
-      tags: icinga2-api
-
-- hosts: icinga2_master
-  become: no
-  roles:
     - role: icinga2-api/services
       tags: icinga2-api
