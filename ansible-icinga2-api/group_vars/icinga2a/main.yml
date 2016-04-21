@@ -46,9 +46,10 @@ icinga2_services:
       attrs:
         check_command: check_dig
         vars.dig_server: 8.8.4.4
+        vars.dig_port: 53
         vars.dig_lookup: icinga.org
         vars.dig_record_type: MX
-        vars.dig_expected_address: 'mail.netways.de.'
+        vars.dig_expected_address: '10 mail.netways.de.'
         vars.dig_warning: 500
         vars.dig_timeout: 1000
         vars.dig_critical: 800
