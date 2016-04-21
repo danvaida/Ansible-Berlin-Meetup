@@ -15,18 +15,6 @@
     update_cache: yes
   when: packages is defined
 
-- name: checking pip version
-  pip:
-    name: pip
-  register: pip_v
-  when: '"python-pip" in inst_pkgs.common'
-
-- name: upgrading pip if needed
-  shell: "pip install --upgrade pip"
-  when: '"python-pip" in inst_pkgs.common and "You should consider upgrading" in pip_v.stderr'
-  changed_when: "'Successfully installed' in {{ pip_upgd.stdout }}"
-  register: pip_upgd
-
 - name: installing python packages through pip
   pip:
     name: "{{ item }}"
