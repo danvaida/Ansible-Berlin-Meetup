@@ -1,0 +1,6 @@
+# {{ ansible_managed }}
+object ApiUser "{{ icinga2_api_user }}" {
+  password = "{{ icinga2_api_pass }}"
+  client_cn = NodeName
+  permissions = [ "*" ]
+}
