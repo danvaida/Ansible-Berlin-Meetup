@@ -11,8 +11,8 @@
     - name: updating /etc/hosts
       lineinfile:
         dest: /etc/hosts
-        regexp: "{{ ansible_eth0.ipv4.address }}"
-        line: "{{ ansible_eth0.ipv4.address }} {{ ansible_hostname }}"
+        regexp: "{{ ansible_eth1.ipv4.address }}"
+        line: "{{ ansible_eth1.ipv4.address }} {{ ansible_hostname }}"
       tags: hostname
 
   roles:
