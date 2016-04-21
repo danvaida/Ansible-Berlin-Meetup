@@ -21,3 +21,10 @@ check_commands:
          "-d", "$mysql_database$",
          "-u", "$mysql_username$",
          "-p", "$mysql_password$",
+  check_jmx: |
+     "-U", "$service_url$",
+         "-O", "$object_name$",
+         "-A", "$attrib_name$",
+         "-K", "$comp_key$",
+         "-w", "$warn$",
+         "-c", "$crit$",
