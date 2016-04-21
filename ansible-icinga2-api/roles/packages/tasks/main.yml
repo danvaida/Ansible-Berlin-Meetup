@@ -1,9 +1,4 @@
 ---
-- name: upgrading all packages
-  yum:
-    name: "*"
-    state: latest
-
 - name: installing all required packages
   yum:
     name: "{{ item }}"
