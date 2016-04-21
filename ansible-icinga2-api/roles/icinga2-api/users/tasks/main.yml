@@ -16,6 +16,7 @@
     return_content: yes
   tags: icinga2_api_users
 
+#Here we're creating various other contacts
 - name: creating the icinga2 contact(s)
   uri:
     user: "{{ icinga2_api_user }}"
