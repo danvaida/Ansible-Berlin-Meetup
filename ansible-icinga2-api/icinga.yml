@@ -49,8 +49,6 @@
   gather_facts: no
   become: no
   roles:
-    - role: icinga2-api/dynamic_hosts
-      tags: icinga2-api
 
     - role: icinga2-api/services
       tags: icinga2-api

@@ -8,9 +8,14 @@ vagrant:
   min_cores: 1
 
 instances:
-
   - hostname: icinga2a
     private_ip: 10.10.10.10
+    memory: 1024
+    cores: 1
+    mounts: []
+
+  - hostname: icinga2b
+    private_ip: 10.10.10.11
     memory: 1024
     cores: 1
     mounts: []
