@@ -2,7 +2,7 @@
 vagrant:
   default_box: centos-71-x64-vbox
   default_box_url: http://boxes.icinga.org/centos-71-x64-vbox.box
-  default_box_check_update: true
+  default_box_check_update: false
   ssh_insert_key: false
   min_memory: 256
   min_cores: 1
