@@ -1,0 +1,54 @@
+---
+icinga2_hostname: icinga2a
+icinga2_api_user: "{{ icinga2_hostname }}"
+icinga2_api_pass: HereGoesSomething
+
+icinga2_hostgroups:
+  - name: databases
+    info:
+      attrs:
+        display_name: databases
+
+  - name: loadbalancers
+    info:
+      attrs:
+        display_name: loadbalancers
+
+icinga2_static_hosts:
+  - name: useastdb.ensembl.org
+    info:
+      templates: [ "generic-host" ]
+      attrs:
+        address: 54.221.206.40
+        vars.hostgroups: databases
+        groups: [ "databases" ]
+
+  - name: shell.openshells.net
+    info:
+      templates: [ "generic-host" ]
+      attrs:
+        address: 70.39.65.167
+        vars.os: Linux
+        vars.hostgroups: loadbalancers
+        groups: [ "loadbalancers" ]
+
+icinga2_servicegroups:
+  - name: dns
+    info:
+      attrs:
+        display_name: dns
+
+icinga2_services:
+  - name: diggy
+    host: "{{ icinga2_hostname }}" 
+    info:
+      templates: [ "generic-service" ]
+      attrs:
+        check_command: check_dig
+        vars.dig_server: 8.8.4.4
+        vars.dig_lookup: icinga.org
+        vars.dig_record_type: MX
+        vars.dig_expected_address: 'mail.netways.de.'
+        vars.dig_warning: 500
+        vars.dig_timeout: 1000
+        vars.dig_critical: 800

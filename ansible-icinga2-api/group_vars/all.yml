@@ -1,0 +1,10 @@
+---
+icinga2_admin_contact_email:
+  attrs:
+    email: "admin@somewhere.com"
+
+icinga2_contacts:
+  - name: rwilliams
+    info:
+      attrs:
+        email: "roger.williams@somewhere.com"

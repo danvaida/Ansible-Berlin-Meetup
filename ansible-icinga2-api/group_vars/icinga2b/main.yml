@@ -1,0 +1,44 @@
+---
+icinga2_hostname: icinga2b
+icinga2_api_user: "{{ icinga2_hostname }}"
+icinga2_api_pass: HereGoesNothing
+
+icinga2_hostgroups:
+  - name: webservers
+    info:
+      attrs:
+        display_name: webservers
+
+  - name: caches
+    info:
+      attrs:
+        display_name: caches
+
+icinga2_static_hosts:
+  - name: nginxdotcom
+    info:
+      templates: [ "generic-host" ]
+      attrs:
+        address: 95.211.80.227
+        vars.hostgroups: webservers
+        groups: [ "webservers" ]
+
+  - name: varnishcachedotorg
+    info:
+      templates: [ "generic-host" ]
+      attrs:
+        address: 176.58.90.154
+        vars.hostgroups: [ "caches" , "webservers" ]
+        groups: [ "caches", "webservers" ]
+
+icinga2_servicegroups: []
+
+icinga2_services:
+  - name: flipper
+    host: "{{ icinga2_hostname }}" 
+    info:
+      templates: [ "generic-service" ]
+      attrs:
+        check_command: check_mysql
+        vars.mysql_hostname: 54.221.206.40
+        vars.mysql_username: anonymous
