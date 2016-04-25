@@ -20,7 +20,7 @@ Here are some useful snippets throughout the example:
 
 ```bash
 $ vagrant up && ansible-playbook icinga.yml
-$ ansible-playbook icinga.yml --tags icinga2-api --extra-vars 'icinga_api_methond=POST'
+$ ansible-playbook icinga.yml --tags icinga2-api --extra-vars 'icinga_api_method=POST'
 
 $ vagrant ssh icinga2a -c 'sudo icinga2 object list --type hostgroup --name databases'
 $ vagrant ssh icinga2b -c 'sudo icinga2 object list --type hostgroup --name webservers'
